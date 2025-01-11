@@ -1,6 +1,13 @@
 {
     "$schema": "https://raw.githubusercontent.com/microsoft/vcpkg-tool/main/docs/vcpkg.schema.json",
     "dependencies": [
-        "commonlibsse-ng"
+        "fmt",
+        "boost-nowide",
+        "rsm-binary-io",
+        "rapidcsv",
+        "frozen",
+        "rsm-mmio",
+        "xbyak",
+        "spdlog"
     ]
 }
