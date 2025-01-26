@@ -52,7 +52,12 @@ bool SetEnvironmentTempPath() {
 
     // Get the path to the Documents folder
     if (SUCCEEDED(SHGetKnownFolderPath(FOLDERID_Documents, 0, NULL, &documentsPath))) {
-        bool useSecondary = wcsstr(documentsPath, L"OneDrive") != nullptr;
+        wchar_t* docPath = _wcsdup(documentsPath);
+        _wcslwr(docPath);
+
+        bool useSecondary = wcsstr(docPath, L"onedrive") != nullptr;
+
+        free(docPath);
 
         if (useSecondary) {
             // Don't use the Documents path if it is synced to OneDrive (cloud)
@@ -63,7 +68,6 @@ bool SetEnvironmentTempPath() {
             }
         else {
             newTempPath = std::wstring(documentsPath) + L"\\My Games\\Mantella\\data\\tmp";
-            CoTaskMemFree(documentsPath);  // Release the memory
 
             // Attempt to create the directory path if it doesn't exist
             try {
@@ -75,6 +79,7 @@ bool SetEnvironmentTempPath() {
                 useSecondary = true;
                 }
             }
+        CoTaskMemFree(documentsPath);  // Release the memory
 
         if (useSecondary) {            // Fallback to system temp directory
             wchar_t tempPath[MAX_PATH];
